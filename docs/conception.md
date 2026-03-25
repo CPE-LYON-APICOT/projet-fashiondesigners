@@ -26,28 +26,34 @@ Avec les methodes `updateState()` `saveState()` et `loadState()`, l'état de l'i
 
 ### DP 2 — *Strategy*
 
-**Feature associée** : Les fonctionnalites ameliorations 
+**Feature associée** : Les differents clicks 
 
-**Justification** : Cela permet de définir une famille d'algorithmes (les différentes améliorations), de les encapsuler dans des classes séparées et de les rendre interchangeables. Le pattern Strategy permet de changer dynamiquement le comportement d'une amélioration sans modifier le code qui l'utilise, ce qui respecte le principe Open/Closed. De plus, cela facilite l'ajout de nouvelles améliorations à l'avenir sans impacter les fonctionnalités existantes.
+**Justification** : Le click est la fonctionnalité centrale du jeu, et on veut pouvoir changer la façon dont les ressources sont gagnées (par exemple, un load click qui rapporte + mais on doit cliquer au bon moments  et un spamclick qui rapporte moins mais on peut cliquer autant qu'on veut) sans modifier le code de base du click. Le pattern Strategy permet d'encapsuler chaque algorithme de gain de ressources dans une classe séparée et de les interchanger à l'exécution. 
 
+**Intégration** : spamclick et loadclick implémentent une interface `ClickStrategy`. 
 
-**Intégration** : une interface `ImprovementStrategy` avec une méthode `applyImprovement(Player player)`. Chaque amélioration (par exemple, `DoubleClickImprovement`, `AutoClickImprovement`) implémente cette interface. Le service de gestion des améliorations utilise ces stratégies pour appliquer les effets correspondants au joueur lorsqu'une amélioration est activée.
+### DP 3 — *Observer*
 
-### DP 3 — *Nom du pattern*
+**Feature associée** : gerer la la mise a jour du son, image
 
-**Feature associée** : 
+**Justification** : Quand le joueur clique (Fonctionnalité 1), le ResourceManager doit mettre à jour les ressources, le SoundManager doit jouer un son de clic, et le UIManager doit mettre à jour l'affichage des ressources. En utilisant le pattern Observer, chaque manager peut s'abonner aux événements de clic sans que le ResourceManager ait besoin de connaître les détails de qui écoute. Cela découple les composants et rend le code plus modulaire et maintenable. L'alternative (un `switch/case` centralisé) serait moins flexible et violerait le principe Single Responsibility.
 
-**Justification** : 
+**Intégration** : une interface `ClickObserver` avec une méthode `onClick()`. Les managers (ResourceManager, SoundManager) implémentent cette interface et s'enregistrent auprès du `ClickService` via `addClickObserver(...)`. Le `ClickService` notifie tous les observers à chaque clic.
 
-**Intégration** : 
+### DP 4 — *Decorator*
 
-### DP 4 — *Nom du pattern*
+**Feature associée** : gerer les bonus temporaires
 
-**Feature associée** : 
+**Justification** : Quand le joueur active un bonus temporaire (par exemple, double click pendant 30 secondes), on veut pouvoir ajouter cet effet à l'expérience de jeu sans modifier la classe `Player` ou les autres classes de base. Le pattern Decorator permet d'envelopper un objet existant (le joueur) avec une nouvelle fonctionnalité (le bonus) de manière transparente. Cela respecte le principe Open/Closed et facilite l'ajout de nouveaux types de bonus à l'avenir.
 
-**Justification** : 
+**Intégration** : une classe `Player` qui représente le joueur de base, et des classes décoratrices comme `DoubleClickPlayer` qui étendent `Player` et ajoutent des fonctionnalités supplémentaires. Lorsqu'un bonus est activé, le service de gestion des bonus crée une instance du décorateur approprié et l'utilise à la place du joueur de base pendant la durée du bonus.
 
-**Intégration** : 
+### DP 5 — *Factory*
+
+**Feature associée** : gerer la création de nouvelles machines 
+
+**Justification** : Quand le joueur débloque une nouvelle machine, on veut pouvoir créer une instance de cette machine sans exposer la logique de construction dans le code client. Le pattern Factory centralise la création des machines et garantit que les objets sont créés de manière cohérente. Cela facilite également l'ajout de nouvelles machines à l'avenir sans modifier le code client.
+**Intégration** : une classe `MachineFactory` avec des méthodes comme `createWoodCutter()`, `createMine()`, etc., qui retournent des instances de machines préconfigurées. Le service de gestion des machines utilise cette factory pour créer de nouvelles machines lorsque le joueur les débloque, au lieu d'appeler directement les constructeurs.
 
 ## Diagrammes UML
 
