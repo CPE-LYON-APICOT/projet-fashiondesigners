@@ -57,41 +57,164 @@ Avec les methodes `updateState()` `saveState()` et `loadState()`, l'état de l'i
 
 ## Diagrammes UML
 
-### Diagramme 1 — *Type (classe, séquence, cas d'utilisation…)*
-
-<!-- Exemple de syntaxe PlantUML (à remplacer par votre diagramme) :
+### Diagramme 1 — *Diagramme de classe*
 
 ```plantuml
 @startuml
-interface Drawable {
-    + draw(gc : GraphicsContext) : void
+
+' =========================
+' ===== SINGLETON =========
+' =========================
+class GameSession {
+  -instance : GameSession
+  -player : Player
+  -clickers : List<Clicker>
+  -machines : List<Machine>
+  +getInstance() : GameSession
 }
 
-abstract class Entity {
-    - x : double
-    - y : double
-    + getX() : double
-    + getY() : double
-    + update() : void
+GameSession --> Player
+GameSession --> Clicker
+GameSession --> Machine
+
+' =========================
+' ===== BOOSTABLE =========
+' =========================
+interface Boostable {
++getValue() : int
 }
 
-Entity ..|> Drawable
-
-class Player extends Entity {
-    - speed : double
-    + move(direction : Direction) : void
+' =========================
+' ===== PLAYER ============
+' =========================
+class Player {
+-level : int
+-xp : int
+-money : int
+-inventory : Inventory
++gainXP(amount)
++earnMoney(amount)
 }
 
-class Obstacle extends Entity {
-    - damage : int
+Player --> Inventory
+
+' =========================
+' ===== CLICKER ===========
+' =========================
+class Clicker {
+-resourceType : String
+-strategy : ClickStrategy
++activate()
++collect() : int
 }
-@enduml
-```
 
-Ceci est un exemple, remplacez-le par votre propre diagramme. -->
+Clicker --> ClickStrategy
 
-```plantuml
-@startuml
+' =========================
+' ===== STRATEGY ==========
+' =========================
+interface ClickStrategy {
++produce() : int
+}
+
+class SpamClickStrategy
+class ChargeClickStrategy
+
+ClickStrategy <|.. SpamClickStrategy
+ClickStrategy <|.. ChargeClickStrategy
+
+' =========================
+' ===== MACHINE ===========
+' =========================
+class Machine {
+-baseProduction : int
++produce()
+}
+
+' =========================
+' ===== INVENTORY =========
+' =========================
+class Inventory {
+-resources : Map
++addResource(type, amount)
++hasResources(recipe) : boolean
++consumeResources(recipe)
+}
+
+' =========================
+' ===== RECIPES ===========
+' =========================
+class Recipe {
+-cost : Map
+-requiredLevel : int
+-resultType : String
+}
+
+class RecipeSystem {
++canCraft(recipe, player) : boolean
++craft(recipe, session)
+}
+
+RecipeSystem --> Recipe
+RecipeSystem --> GameSession
+
+' =========================
+' ===== FACTORY ===========
+' =========================
+class MachineFactory {
++createMachine(type) : Machine
+}
+
+MachineFactory --> Machine
+RecipeSystem --> MachineFactory
+
+' =========================
+' ===== OBSERVER ==========
+' =========================
+interface Observer {
++update()
+}
+
+interface Subject {
++attach(obs)
++detach(obs)
++notify()
+}
+
+class XPSystem {
+-observers : List<Observer>
++gainXP(amount)
+}
+
+class UnlockSystem {
++update()
+}
+
+Subject <|.. XPSystem
+Observer <|.. UnlockSystem
+
+XPSystem --> Observer
+Player --> XPSystem
+
+' =========================
+' ===== DECORATOR =========
+' =========================
+abstract class BoostDecorator implements Boostable {
+-wrapped : Boostable
+}
+
+class AutoClickBoost
+class MultiplierBoost
+
+Boostable <|.. Player
+Boostable <|.. Machine
+Boostable <|.. BoostDecorator
+
+BoostDecorator <|-- AutoClickBoost
+BoostDecorator <|-- MultiplierBoost
+
+BoostDecorator --> Boostable
+
 
 @enduml
 ```
