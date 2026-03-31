@@ -17,4 +17,8 @@ public class ClickerService {
         this.inventoryService = inventoryService;
         this.clickers = new HashSet<>();
     }
+
+    public void handleClick(Clicker clicker) {
+        inventoryService.addRessource(clicker.getRessource(), clicker.getGain());
+    }
 }

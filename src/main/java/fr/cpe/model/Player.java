@@ -45,7 +45,7 @@ public class Player {
 
     public String showInventory(){
         return inventoryService.getInventory().entrySet().stream()
-                .map(e -> e.getKey() + ": " + e.getValue())
+                .map(e -> "L'inventaire du joueur est composé de :" + e.getKey() + ": " + e.getValue())
                 .collect(Collectors.joining("\n"));
     }
 }

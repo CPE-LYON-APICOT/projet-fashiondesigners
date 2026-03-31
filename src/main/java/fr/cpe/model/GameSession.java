@@ -8,8 +8,6 @@ public class GameSession {
     private static GameSession instance;
     private final Player player;
 
-
-
     private GameSession(Player player) {
         this.player = player;
     }

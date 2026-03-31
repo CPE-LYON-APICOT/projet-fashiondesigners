@@ -13,12 +13,16 @@ package fr.cpe.service;
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
 import com.google.inject.Inject;
+import fr.cpe.model.Clicker;
 import fr.cpe.model.GameSession;
 import fr.cpe.model.Player;
 import fr.cpe.model.Ressource;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.util.Objects;
 
 /**
  * Service de jeu — gère l'état du jeu et ses éléments visuels.
@@ -63,10 +67,12 @@ public class GameService {
 
     //Service à injecter
     GameSession session ;
+    ClickerService clickerService;
 
     @Inject
-    public GameService(InventoryService inventoryService) {
+    public GameService(InventoryService inventoryService, ClickerService clickerService) {
         session = GameSession.getInstance(new Player("Leegg", inventoryService));
+        this.clickerService = clickerService;
     }
 
     /**
@@ -74,16 +80,30 @@ public class GameService {
      */
     public void init(Pane gamePane) {
         Player player = session.getPlayer();
-        player.getInventoryService().addRessource(Ressource.FRENE, 5);
-        Text text = new Text(20, 30,"Inventaire : " + player.showInventory());
-        text.setFill(Color.web("#cdd6f4"));
-        gamePane.getChildren().add(text);
+        Clicker clicker = new Clicker(Ressource.FRENE, 1, new Image(getClass().getResourceAsStream("/frene.png"), 100, 100, true, true));
+
+        Text inventoryText = new Text(player.showInventory());
+        inventoryText.setFill(Color.web("#cdd6f4"));
+
+        clicker.getImageView().setOnMouseClicked(e -> {
+            clickerService.handleClick(clicker);
+            inventoryText.setText(player.showInventory()); // refresh
+        });
+
+        gamePane.getChildren().addAll(clicker.getImageView(), inventoryText);
+
+        gamePane.widthProperty().addListener((obs, oldVal, newVal) ->
+                inventoryText.setX(newVal.doubleValue() - inventoryText.getBoundsInLocal().getWidth() - 20)
+        );
+        gamePane.heightProperty().addListener((obs, oldVal, newVal) ->
+                inventoryText.setY(newVal.doubleValue() - 20)
+        );
     }
 
     /**
      * Met à jour l'état du jeu (appelé à chaque frame).
      */
     public void update(double width, double height) {
-        //todo
+
     }
 }
