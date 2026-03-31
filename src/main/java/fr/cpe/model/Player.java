@@ -1,7 +1,9 @@
 package fr.cpe.model;
 
+
 public class Player {
 
+    private String pseudo;
     private int level;
     private int xp;
     private int money;
@@ -12,6 +14,14 @@ public class Player {
         this.xp = xp;
         this.money = money;
         this.inventory = inventory;
+    }
+
+    public Player(String pseudo){
+        this.pseudo = pseudo;
+    }
+
+    public String getPseudo(){
+        return pseudo;
     }
 
     public int getLevel() {

@@ -13,6 +13,8 @@ package fr.cpe.service;
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
 import com.google.inject.Inject;
+import fr.cpe.model.GameSession;
+import fr.cpe.model.Player;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -59,17 +61,19 @@ import javafx.scene.text.Text;
 public class GameService {
 
     //Service à injecter
+    GameSession session ;
 
     @Inject
     public GameService() {
-        //TODO
+        session = GameSession.getInstance(new Player("Leegg"));
     }
 
     /**
      * Initialise les éléments visuels du jeu (appelé une fois au démarrage).
      */
     public void init(Pane gamePane) {
-        Text text = new Text(20, 30, "Projet POO — À vous de jouer !");
+
+        Text text = new Text(20, 30,"Bienvenu sur le jeu " + session.getPlayer().getPseudo() + " A toi de jouer !" );
         text.setFill(Color.web("#cdd6f4"));
         gamePane.getChildren().add(text);
     }

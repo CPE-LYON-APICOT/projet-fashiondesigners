@@ -23,4 +23,8 @@ public class GameSession {
         }
         return instance;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
 }
