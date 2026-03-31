@@ -20,6 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import fr.cpe.engine.GameEngine;
 import fr.cpe.engine.InputService;
+import fr.cpe.service.InventoryService;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -61,6 +62,7 @@ public class App extends Application {
 
         // Guice construit le GameEngine et injecte automatiquement les services
         engine = injector.getInstance(GameEngine.class);
+
         InputService inputService = injector.getInstance(InputService.class);
 
         Pane gamePane = new Pane();

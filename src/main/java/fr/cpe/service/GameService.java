@@ -15,6 +15,7 @@ package fr.cpe.service;
 import com.google.inject.Inject;
 import fr.cpe.model.GameSession;
 import fr.cpe.model.Player;
+import fr.cpe.model.Ressource;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -64,16 +65,17 @@ public class GameService {
     GameSession session ;
 
     @Inject
-    public GameService() {
-        session = GameSession.getInstance(new Player("Leegg"));
+    public GameService(InventoryService inventoryService) {
+        session = GameSession.getInstance(new Player("Leegg", inventoryService));
     }
 
     /**
      * Initialise les éléments visuels du jeu (appelé une fois au démarrage).
      */
     public void init(Pane gamePane) {
-
-        Text text = new Text(20, 30,"Bienvenu sur le jeu " + session.getPlayer().getPseudo() + " A toi de jouer !" );
+        Player player = session.getPlayer();
+        player.getInventoryService().addRessource(Ressource.FRENE, 5);
+        Text text = new Text(20, 30,"Inventaire : " + player.showInventory());
         text.setFill(Color.web("#cdd6f4"));
         gamePane.getChildren().add(text);
     }

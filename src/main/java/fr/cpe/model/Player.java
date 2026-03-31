@@ -1,23 +1,26 @@
 package fr.cpe.model;
 
 
+import com.google.inject.Inject;
+import fr.cpe.service.InventoryService;
+
+import java.util.stream.Collectors;
+
 public class Player {
 
     private String pseudo;
     private int level;
     private int xp;
     private int money;
-    private Inventory inventory;
+    private InventoryService inventoryService;
 
-    public Player(int level, int xp, int money, Inventory inventory) {
-        this.level = level;
-        this.xp = xp;
-        this.money = money;
-        this.inventory = inventory;
-    }
-
-    public Player(String pseudo){
+    @Inject
+    public Player(String pseudo,InventoryService inventoryService) {
         this.pseudo = pseudo;
+        this.level = 1;
+        this.xp = 0;
+        this.money = 0;
+        this.inventoryService = inventoryService;
     }
 
     public String getPseudo(){
@@ -36,15 +39,13 @@ public class Player {
         return money;
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public InventoryService getInventoryService() {
+        return inventoryService;
     }
 
-    public void gainXP(int amount ) {
-        this.xp+=amount;
-    }
-
-    public void earnMoney(int amount ) {
-        this.money+=amount;
+    public String showInventory(){
+        return inventoryService.getInventory().entrySet().stream()
+                .map(e -> e.getKey() + ": " + e.getValue())
+                .collect(Collectors.joining("\n"));
     }
 }
