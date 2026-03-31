@@ -219,10 +219,49 @@ BoostDecorator --> Boostable
 @enduml
 ```
 
-### Diagramme 2 — *Type*
+### Diagramme 2 — *Diagramme de cas d'utilistion*
 
 ```plantuml
 @startuml
+left to right direction
+
+actor Joueur
+
+rectangle "Système de jeu" {
+  usecase "Lancer une partie" as UC1
+  usecase "Récolter des ressources" as UC2
+  usecase "Collecter les ressources\nchargées" as UC3
+  usecase "Consulter l'inventaire" as UC4
+  usecase "Crafter un outil" as UC5
+  usecase "Crafter une machine" as UC6
+  usecase "Vendre des ressources" as UC7
+  usecase "Acheter un boost" as UC8
+  usecase "Consulter les recettes\ndébloquées" as UC9
+  usecase "Sauvegarder la partie" as UC10
+  usecase "Charger une partie" as UC11
+
+  usecase "Vérifier les ressources" as UC12
+  usecase "Vérifier le niveau requis" as UC13
+  usecase "Dépenser l'argent" as UC14
+}
+
+Joueur --> UC1
+Joueur --> UC2
+Joueur --> UC3
+Joueur --> UC4
+Joueur --> UC5
+Joueur --> UC6
+Joueur --> UC7
+Joueur --> UC8
+Joueur --> UC9
+Joueur --> UC10
+Joueur --> UC11
+
+UC5 .> UC12 : <<include>>
+UC5 .> UC13 : <<include>>
+UC6 .> UC12 : <<include>>
+UC6 .> UC13 : <<include>>
+UC8 .> UC14 : <<include>>
 
 @enduml
 ```
