@@ -219,6 +219,8 @@ BoostDecorator --> Boostable
 @enduml
 ```
 
+![img.png](img.png)
+
 ### Diagramme 2 — *Diagramme de cas d'utilistion*
 
 ```plantuml
