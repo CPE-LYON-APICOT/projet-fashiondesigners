@@ -1,5 +1,4 @@
 package fr.cpe.model;
 
-public class Clicker {
-
+public class Inventory {
 }
