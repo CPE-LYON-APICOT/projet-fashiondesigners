@@ -68,11 +68,13 @@ public class GameService {
     //Service à injecter
     GameSession session ;
     ClickerService clickerService;
+    private final MachineService machineService;
 
     @Inject
-    public GameService(InventoryService inventoryService, ClickerService clickerService) {
+    public GameService(InventoryService inventoryService, ClickerService clickerService,MachineService machineService) {
         session = GameSession.getInstance(new Player("Leegg", inventoryService));
         this.clickerService = clickerService;
+        this.machineService = machineService;
     }
 
     /**
