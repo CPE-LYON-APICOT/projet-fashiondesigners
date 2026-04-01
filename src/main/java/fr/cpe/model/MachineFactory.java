@@ -6,9 +6,6 @@ import com.google.inject.Singleton;
 public  class MachineFactory {
     public Machine createMachine(Ressource ressource) {
         Machine machine = new Machine();
-        if(ressource == Ressource.BLE) {
-            machine.setStrategy(new blabla);
-        }
 
         switch (ressource){
             case BLE -> machine.setProductionMinute(5);
@@ -18,8 +15,17 @@ public  class MachineFactory {
             case GOUJON -> machine.setProductionMinute(0.5);
         }
 
+        switch (ressource){
+            case BLE -> machine.setCouleur("Noir");
+            case FER -> machine.setCouleur("Bleu");
+            case FRENE -> machine.setCouleur("Rose");
+            case ORTIE -> machine.setCouleur("Vert");
+            case GOUJON -> machine.setCouleur("Jaune");
+        }
+
+
         if(ressource == Ressource.BLE) {
-            machine.canBeRemoved = false;
+            machine.setCanBeRemoved(false);
         }
         machine.init();
         return machine;

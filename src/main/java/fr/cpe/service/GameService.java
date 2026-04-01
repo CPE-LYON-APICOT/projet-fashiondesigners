@@ -13,10 +13,7 @@ package fr.cpe.service;
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
 import com.google.inject.Inject;
-import fr.cpe.model.Clicker;
-import fr.cpe.model.GameSession;
-import fr.cpe.model.Player;
-import fr.cpe.model.Ressource;
+import fr.cpe.model.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -83,7 +80,7 @@ public class GameService {
     public void init(Pane gamePane) {
         Player player = session.getPlayer();
         Clicker clicker = new Clicker(Ressource.FRENE, 1, new Image(getClass().getResourceAsStream("/frene.png"), 100, 100, true, true));
-
+        clicker.setStrategy(new SpamClickStrategy());
         Text inventoryText = new Text(player.showInventory());
         inventoryText.setFill(Color.web("#cdd6f4"));
 
