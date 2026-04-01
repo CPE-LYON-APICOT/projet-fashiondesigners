@@ -20,7 +20,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import fr.cpe.engine.GameEngine;
 import fr.cpe.engine.InputService;
-import fr.cpe.service.InventoryService;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -59,7 +58,6 @@ public class App extends Application {
     public void start(Stage stage) {
         // Création de l'injecteur Guice avec notre module de configuration
         Injector injector = Guice.createInjector(new AppModule());
-
         // Guice construit le GameEngine et injecte automatiquement les services
         engine = injector.getInstance(GameEngine.class);
 
