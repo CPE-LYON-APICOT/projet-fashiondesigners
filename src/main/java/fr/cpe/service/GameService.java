@@ -13,16 +13,11 @@ package fr.cpe.service;
 // ╚══════════════════════════════════════════════════════════════════════════════╝
 
 import com.google.inject.Inject;
-import fr.cpe.model.Clicker;
-import fr.cpe.model.GameSession;
-import fr.cpe.model.Player;
-import fr.cpe.model.Ressource;
+import fr.cpe.model.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-
-import java.util.Objects;
 
 /**
  * Service de jeu — gère l'état du jeu et ses éléments visuels.
@@ -71,10 +66,19 @@ public class GameService {
     private final MachineService machineService;
 
     @Inject
-    public GameService(InventoryService inventoryService, ClickerService clickerService,MachineService machineService) {
+    public GameService(InventoryService inventoryService,
+                       ClickerService clickerService,
+                       MachineService machineService,
+                       MaterialFactory factory
+    ) {
         session = GameSession.getInstance(new Player("Leegg", inventoryService));
         this.clickerService = clickerService;
         this.machineService = machineService;
+
+
+
+        /// test
+        factory.create(Materials.ALUMNITE);
     }
 
     /**
