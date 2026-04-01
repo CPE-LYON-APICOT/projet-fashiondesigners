@@ -4,6 +4,7 @@ import com.google.inject.Singleton;
 
 @Singleton
 public  class MachineFactory {
+/**
     public Machine createMachine(Ressource ressource) {
         Machine machine = new Machine();
         if(ressource == Ressource.BLE) {
@@ -25,4 +26,5 @@ public  class MachineFactory {
         return machine;
 
     }
+ */
 }

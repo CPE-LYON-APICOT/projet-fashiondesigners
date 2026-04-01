@@ -1,6 +1,7 @@
 package fr.cpe.model;
 
 import fr.cpe.service.InventoryService;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import java.util.Arrays;
 import java.util.Map;
@@ -11,6 +12,7 @@ public class MaterialFactory {
 
     private final InventoryService inventoryService;
 
+    @Inject
     public MaterialFactory(InventoryService inventoryService){
         this.inventoryService = inventoryService;
     }
