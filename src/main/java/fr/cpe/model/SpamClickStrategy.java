@@ -1,6 +1,6 @@
 package fr.cpe.model;
 
-public class SpamClickStrategy implements ClickStrategy {
+public class SpamClickStrategy extends ClickStrategyBase {
     @Override
     public boolean canClick() {
         return true;
@@ -8,6 +8,11 @@ public class SpamClickStrategy implements ClickStrategy {
 
     @Override
     public double getGainMultiplier() {
-        return 0;
+        return 1;
+    }
+
+    @Override
+    public void click() {
+
     }
 }

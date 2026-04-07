@@ -91,9 +91,25 @@ public class GameService {
         // ── Clicker ───────────────────────────────────────────────────────────
         Clicker clicker = new Clicker(
                 Ressource.FRENE, 1,
-                new Image(getClass().getResourceAsStream("/frene.png"), 90, 90, true, true)
+                new Image(getClass().getResourceAsStream("/frene.png"), 90, 90, true, true),
+                new LoadClickStrategy(5,10,10)
         );
+
         ImageView clickerView = clicker.getImageView();
+        clickerView.setOpacity(0.6);
+
+        Text multiplierText = new Text("x" + clicker.getStrategy().getGainMultiplier());
+        multiplierText.setFont(Font.font("Georgia", FontWeight.BOLD, 13));
+        multiplierText.setFill(Color.web(GOLD_LIGHT));
+        multiplierText.setLayoutX(100);
+        multiplierText.setLayoutY(158);
+        multiplierText.setMouseTransparent(true);
+
+        clicker.onChange((s) -> {
+            clickerView.setOpacity(s.canClick() ? 1.0 : 0.6);
+            multiplierText.setText("x" + s.getGainMultiplier());
+        });
+
         clickerView.setLayoutX(68);
         clickerView.setLayoutY(148);
 
@@ -171,12 +187,11 @@ public class GameService {
         ft.setFromValue(0); ft.setToValue(1); ft.play();
 
         gamePane.getChildren().addAll(
-                halo, clickerView, clickerLabel, clickerSub,
+                halo, clickerView, multiplierText, clickerLabel, clickerSub,
                 titleMain, titleSub, divider,
                 inventoryCard, recipesBtn
         );
     }
-
     // ══════════════════════════════════════════════════════════════════════════
     //  VUE RECETTES
     // ══════════════════════════════════════════════════════════════════════════

@@ -20,5 +20,6 @@ public class ClickerService {
 
     public void handleClick(Clicker clicker) {
         inventoryService.addRessource(clicker.getRessource(), clicker.getGain());
+        clicker.getStrategy().click();
     }
 }
