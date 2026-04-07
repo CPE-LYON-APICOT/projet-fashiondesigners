@@ -73,93 +73,44 @@ public class GameService {
         Text titleMain = new Text("CLICKER");
         titleMain.setFont(Font.font("Georgia", FontWeight.BOLD, FontPosture.ITALIC, 52));
         titleMain.setFill(Color.web(GOLD));
-        titleMain.setLayoutX(42);
-        titleMain.setLayoutY(68);
+        titleMain.setLayoutX(42); titleMain.setLayoutY(68);
         addGlowEffect(titleMain, GOLD, 18);
 
         Text titleSub = new Text("DESIGNA");
         titleSub.setFont(Font.font("Georgia", FontWeight.BOLD, 28));
         titleSub.setFill(Color.web(CREAM));
-        titleSub.setLayoutX(46);
-        titleSub.setLayoutY(96);
+        titleSub.setLayoutX(46); titleSub.setLayoutY(96);
 
-        Rectangle divider = new Rectangle(280, 1);
+        Rectangle divider = new Rectangle(460, 1);
         divider.setFill(Color.web(GOLD, 0.45));
-        divider.setLayoutX(42);
-        divider.setLayoutY(108);
+        divider.setLayoutX(42); divider.setLayoutY(108);
 
-        // ── Clicker ───────────────────────────────────────────────────────────
-        Clicker clicker = new Clicker(
+        // ── Clickers ──────────────────────────────────────────────────────────
+        Clicker clickerFrene = new Clicker(
                 Ressource.FRENE, 1,
-                new Image(getClass().getResourceAsStream("/frene.png"), 90, 90, true, true),
-                new LoadClickStrategy(5,10,10)
+                new Image(getClass().getResourceAsStream("/frene.png"), 80, 80, true, true),
+                new LoadClickStrategy(5, 10, 10)
+        );
+        Clicker clickerFer = new Clicker(
+                Ressource.FER, 1,
+                new Image(getClass().getResourceAsStream("/fer.png"), 80, 80, true, true),
+                new SpamClickStrategy()
         );
 
-        ImageView clickerView = clicker.getImageView();
-        clickerView.setOpacity(0.6);
+        VBox freneCard = buildClickerCard(clickerFrene, "FRÊNE", "cliquez pour récolter", GOLD, GOLD_LIGHT);
+        VBox ferCard   = buildClickerCard(clickerFer,   "FER",   "cliquez pour miner",    "#7ab0d4", "#a0c8e8");
 
-        Text multiplierText = new Text("x" + clicker.getStrategy().getGainMultiplier());
-        multiplierText.setFont(Font.font("Georgia", FontWeight.BOLD, 13));
-        multiplierText.setFill(Color.web(GOLD_LIGHT));
-        multiplierText.setLayoutX(100);
-        multiplierText.setLayoutY(158);
-        multiplierText.setMouseTransparent(true);
-
-        clicker.onChange((s) -> {
-            clickerView.setOpacity(s.canClick() ? 1.0 : 0.6);
-            multiplierText.setText("x" + s.getGainMultiplier());
-        });
-
-        clickerView.setLayoutX(68);
-        clickerView.setLayoutY(148);
-
-        Rectangle halo = new Rectangle(110, 110);
-        halo.setArcWidth(16); halo.setArcHeight(16);
-        halo.setFill(Color.web(GOLD, 0.06));
-        halo.setStroke(Color.web(GOLD, 0.25));
-        halo.setStrokeWidth(1);
-        halo.setLayoutX(58);
-        halo.setLayoutY(140);
-        halo.setMouseTransparent(true);
-
-        Text clickerLabel = new Text("FRÊNE");
-        clickerLabel.setFont(Font.font("Georgia", FontWeight.BOLD, 13));
-        clickerLabel.setFill(Color.web(GOLD_LIGHT));
-        clickerLabel.setLayoutX(76);
-        clickerLabel.setLayoutY(258);
-
-        Text clickerSub = new Text("cliquez pour récolter");
-        clickerSub.setFont(Font.font("Georgia", FontPosture.ITALIC, 11));
-        clickerSub.setFill(Color.web(MUTED));
-        clickerSub.setLayoutX(52);
-        clickerSub.setLayoutY(273);
-
-        clickerView.setOnMouseEntered(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(120), clickerView);
-            st.setToX(1.08); st.setToY(1.08); st.play();
-        });
-        clickerView.setOnMouseExited(e -> {
-            ScaleTransition st = new ScaleTransition(Duration.millis(120), clickerView);
-            st.setToX(1.0); st.setToY(1.0); st.play();
-        });
-        clickerView.setOnMouseClicked(e -> {
-            clickerService.handleClick(clicker);
-            refreshInventory();
-            ScaleTransition st = new ScaleTransition(Duration.millis(80), clickerView);
-            st.setToX(0.92); st.setToY(0.92);
-            st.setOnFinished(ev -> {
-                ScaleTransition back = new ScaleTransition(Duration.millis(80), clickerView);
-                back.setToX(1.0); back.setToY(1.0); back.play();
-            });
-            st.play();
-        });
+        freneCard.setLayoutX(42);
+        freneCard.setLayoutY(126);
+        ferCard.setLayoutX(258); // 42 + 200 + 16
+        ferCard.setLayoutY(126);
 
         // ── Carte inventaire ──────────────────────────────────────────────────
         VBox inventoryCard = new VBox(6);
-        inventoryCard.setLayoutX(230);
-        inventoryCard.setLayoutY(136);
-        inventoryCard.setPrefWidth(210);
-        inventoryCard.setPadding(new Insets(14, 16, 14, 16));
+        inventoryCard.setLayoutX(42);
+        inventoryCard.setLayoutY(354);
+        inventoryCard.setPrefWidth(290);
+        inventoryCard.setPadding(new Insets(12, 14, 12, 14));
         inventoryCard.setStyle(
                 "-fx-background-color: " + BG_CARD + ";" +
                         "-fx-background-radius: 10;" +
@@ -179,16 +130,16 @@ public class GameService {
 
         // ── Bouton recettes ───────────────────────────────────────────────────
         Button recipesBtn = goldButton("VOIR LES RECETTES  →");
-        recipesBtn.setLayoutX(58);
-        recipesBtn.setLayoutY(300);
-        recipesBtn.setOnAction(e -> fadeTransition(() -> showRecipeView()));
+        recipesBtn.setLayoutX(352);
+        recipesBtn.setLayoutY(380);
+        recipesBtn.setOnAction(e -> fadeTransition(this::showRecipeView));
 
         FadeTransition ft = new FadeTransition(Duration.millis(400), gamePane);
         ft.setFromValue(0); ft.setToValue(1); ft.play();
 
         gamePane.getChildren().addAll(
-                halo, clickerView, multiplierText, clickerLabel, clickerSub,
                 titleMain, titleSub, divider,
+                freneCard, ferCard,
                 inventoryCard, recipesBtn
         );
     }
@@ -423,5 +374,73 @@ public class GameService {
     private int getAmount(ICraftAble resource) {
         Integer val = inventoryService.getInventory().get(resource);
         return val == null ? 0 : val;
+    }
+
+    private VBox buildClickerCard(Clicker clicker, String label, String hint,
+                                  String borderColor, String nameColor) {
+        ImageView view = clicker.getImageView();
+        view.setOpacity(0.6);
+
+        Text multiplierText = new Text("x" + clicker.getStrategy().getGainMultiplier());
+        multiplierText.setFont(Font.font("Georgia", FontWeight.BOLD, 12));
+        multiplierText.setFill(Color.web(nameColor));
+
+        clicker.onChange(s -> {
+            view.setOpacity(s.canClick() ? 1.0 : 0.6);
+            multiplierText.setText("x" + s.getGainMultiplier());
+        });
+
+        Text nameText = new Text(label);
+        nameText.setFont(Font.font("Georgia", FontWeight.BOLD, 13));
+        nameText.setFill(Color.web(nameColor));
+
+        Text hintText = new Text(hint);
+        hintText.setFont(Font.font("Georgia", FontPosture.ITALIC, 11));
+        hintText.setFill(Color.web(MUTED));
+
+        VBox card = new VBox(6);
+        card.setPrefWidth(200);
+        card.setPadding(new Insets(14, 12, 12, 12));
+        card.setAlignment(Pos.CENTER);
+        card.getChildren().addAll(view, nameText, multiplierText, hintText);
+        card.setStyle(
+                "-fx-background-color: " + BG_CARD + ";" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-border-color: " + borderColor + "33;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 1;"
+        );
+
+        String hoverStyle =
+                "-fx-background-color: #1c1c22;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-border-color: " + borderColor + "99;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-border-width: 1;";
+        String baseStyle = card.getStyle();
+
+        card.setOnMouseEntered(e -> {
+            card.setStyle(hoverStyle);
+            ScaleTransition st = new ScaleTransition(Duration.millis(120), view);
+            st.setToX(1.08); st.setToY(1.08); st.play();
+        });
+        card.setOnMouseExited(e -> {
+            card.setStyle(baseStyle);
+            ScaleTransition st = new ScaleTransition(Duration.millis(120), view);
+            st.setToX(1.0); st.setToY(1.0); st.play();
+        });
+        card.setOnMouseClicked(e -> {
+            clickerService.handleClick(clicker);
+            refreshInventory();
+            ScaleTransition st = new ScaleTransition(Duration.millis(80), view);
+            st.setToX(0.92); st.setToY(0.92);
+            st.setOnFinished(ev -> {
+                ScaleTransition back = new ScaleTransition(Duration.millis(80), view);
+                back.setToX(1.0); back.setToY(1.0); back.play();
+            });
+            st.play();
+        });
+
+        return card;
     }
 }
