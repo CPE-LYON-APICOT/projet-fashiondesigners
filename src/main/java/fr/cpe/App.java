@@ -58,9 +58,9 @@ public class App extends Application {
     public void start(Stage stage) {
         // Création de l'injecteur Guice avec notre module de configuration
         Injector injector = Guice.createInjector(new AppModule());
-
         // Guice construit le GameEngine et injecte automatiquement les services
         engine = injector.getInstance(GameEngine.class);
+
         InputService inputService = injector.getInstance(InputService.class);
 
         Pane gamePane = new Pane();
