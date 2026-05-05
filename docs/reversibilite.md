@@ -47,11 +47,11 @@ GameService --> GameSession
 
 ## Bugs connus
 
-| Bug | Sévérité | Conditions de reproduction |
-| :--- | :---: | :--- |
-| **La mise à jour de l'inventaire dans la vue recette est manuelle** | Mineure | Après un craft réussi, l'affichage de l'inventaire dans le titre ou les cartes doit être rafraîchi explicitement. |
-| **Le multiplicateur de gain n'est pas borné** | Mineure | Dans certaines stratégies (Spam), cliquer trop vite peut augmenter les gains de façon exponentielle. |
-| **Exception ignorée lors du craft** | Mineure | Si les ressources sont insuffisantes, l'exception est "catch" et ignorée (`ignored`), ce qui n'informe pas l'utilisateur. |
+| Bug                                                                | Sévérité | Conditions de reproduction                                                                                                                                           |
+|:-------------------------------------------------------------------|:--------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Les Clicker de type LoadCLick se reset quand on change de menu** | Moyenne  | Quand on va dans l'onglet recettes, les clicker en mode LoadCick se remettent à 0 et fatalement on perd les ressources accumulées si on ne les récupèrent pas avant. |
+| **Le multiplicateur de gain n'est pas borné**                      | Mineure  | Dans certaines stratégies (Spam), cliquer trop vite peut augmenter les gains de façon exponentielle.                                                                 |
+| **Exception ignorée lors du craft**                                | Mineure  | Si les ressources sont insuffisantes, l'exception est "catch" et ignorée (`ignored`), ce qui n'informe pas l'utilisateur.                                            |
 
 ## Limitations techniques
 
